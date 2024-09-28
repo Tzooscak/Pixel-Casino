@@ -1,0 +1,142 @@
+const app = function () {
+    const game = {};
+    const suits = ["spades", "hearts", "clubs", "diamonds"];
+    const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
+
+    function init() {
+        console.log('init ready');
+        
+        buildGameBoard();
+        turnOff(game.btnHit);
+        turnOff(game.btnStand);
+        buildDeck();
+        addClicker();
+    }
+
+    function buildDeck() {
+        game.deck = [];
+        for (let i = 0; i < suits.length; i++) {
+           for (let j = 0; j < ranks.length; j++) {
+                console.log(suits[i], ranks[j]);
+                let card = {};
+                let tempValue = isNaN(ranks[j]) ? 10 : ranks[j];
+                tempValue = (ranks[j] == "ace") ? 11 : tempValue;
+
+
+                card.suit = suits[i];
+                card.rank = ranks[j];
+                card.value = tempValue;
+                game.deck.push(card);
+           }
+        }
+        console.log(game.deck);
+    }
+
+    function Shuffle(cards){
+        cards.sort(function(){
+            return .5 - Math.random();    
+        })
+        return cards;
+    }
+
+    function addClicker(){
+        game.btnDeal.addEventListener("click",deal);
+        game.btnStand.addEventListener("click",playerStand);
+        game.btnHit.addEventListener("click",nextCard);
+    }
+
+    function deal() {
+        game.deck = Shuffle(game.deck);
+        game.playerHand = [];
+        game.dealerHand = [];
+        game.start = true;
+
+        game.playerCards.innerHTML = "DEAL";
+        game.dealerCards.textContent = "DEAL";
+    }
+
+    function turnOff(){
+        btn.disabled = true;
+        btn.style.backgroundColor = "#ddd";
+    }
+    function turnOn(){
+        btn.disabled = false;
+        btn.style.backgroundColor = "#000";
+    }
+
+    function buildGameBoard() {
+        game.main = document.querySelector('#game');
+        console.log(game);
+        game.scoreboard = document.createElement('div');
+        game.scoreboard.textContent = "Dealer 0 vs Player 0";
+        game.scoreboard.style.fontSize = "2em";
+        game.main.append(game.scoreboard);
+    
+        game.table = document.createElement('div');
+        game.dealer = document.createElement('div');
+        game.dealerCards = document.createElement('div');
+        game.dealerCards.textContent = "DEALER CARD";
+        game.dealerScore = document.createElement('div');
+        game.dealerScore.textContent = "-";
+        game.dealerScore.classList.add('score');
+        game.dealer.append(game.dealerScore);
+        game.table.append(game.dealer);
+        game.dealer.append(game.dealerCards);
+
+        game.player = document.createElement('div');
+        game.playerCards = document.createElement('div');
+        game.playerCards.textContent = "PLAYER CARD";
+        game.playerScore = document.createElement('div');
+        game.playerScore.textContent = "-";
+        game.playerScore.classList.add('score');
+        game.player.append(game.playerScore);
+        game.table.append(game.player);
+        game.player.append(game.playerCards);
+
+        game.dashboard = document.createElement('div');
+        game.status = document.createElement('div');
+        game.status.classList.add('message');
+        game.status.textContent = "Message for Player";
+
+        game.btnDeal = document.createElement('button');
+        game.btnDeal.textContent = "DEAL";
+        game.btnDeal.classList.add('btn');
+        game.dashboard.append(game.btnDeal);
+
+        game.btnHit = document.createElement('button');
+        game.btnHit.textContent = "HIT";
+        game.btnHit.classList.add('btn');
+        game.dashboard.append(game.btnHit);
+
+        game.btnStand = document.createElement('button');
+        game.btnStand.textContent = "STAND";
+        game.btnStand.classList.add('btn');
+        game.dashboard.append(game.btnStand);
+
+        game.playerCash = document.createElement('div');
+        game.playerCash.classList.add('message');
+        game.playerCash.textContent = "Player Cash: $1000";
+        game.dashboard.append(game.playerCash);
+
+        game.inputBet = document.createElement('input');
+        game.inputBet.type = "number";
+        game.inputBet.style.width = "4em";
+        game.inputBet.style.marginTop = "1em";
+        game.inputBet.value = 0;
+        game.dashboard.append(game.inputBet);
+
+        game.betButton = document.createElement('button');
+        game.betButton.textContent = "BET";
+        game.betButton.classList.add('btn');
+        game.dashboard.append(game.betButton);
+
+        game.dashboard.append(game.status);
+
+        game.table.append(game.dashboard);
+        game.main.append(game.table);
+    }
+
+    return {
+        init : init
+    }
+}();
