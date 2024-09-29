@@ -51,8 +51,32 @@ const app = function () {
         game.dealerHand = [];
         game.start = true;
 
-        game.playerCards.innerHTML = "DEAL";
-        game.dealerCards.textContent = "DEAL";
+        game.playerCards.innerHTML = "";
+        game.dealerCards.textContent = "";
+        takeCard(game.dealerHand,game.dealerCards,false);
+
+    }
+
+    function takeCard(hand,ele,h){
+        let temp = game.deck.shift();
+        console.log(temp);
+        hand.push(temp);
+    }
+
+    function showCard(card, ele){
+        if (card != undefined) {
+            //ele.textContent = card.rank + "&" + card.suit + ";";
+            ele.style.backgroundColor = "white";
+            let div = document.createElement("div");
+            div.classList.add("card");
+            if (card.suit == "hearts" || card.suit == "diams") {
+                div.classList.add("red");
+            }
+            let span1 = document.createElement("div");
+            span1.innerHTML = card.rank + "&" + card.suit + ";";
+            span1.classList.add("tiny");
+            div.appendChild(span1);
+        }
     }
 
     function turnOff(){
