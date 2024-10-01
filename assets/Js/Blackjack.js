@@ -1,16 +1,19 @@
 const app = function () {
     const game = {};
-    const suits = ["spades", "hearts", "clubs", "diamonds"];
-    const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
-
+    const suits = ["spades", "hearts", "clubs", "diams"];
+    const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
+    const score = [0,0];
     function init() {
-        console.log('init ready');
-        
         buildGameBoard();
         turnOff(game.btnHit);
         turnOff(game.btnStand);
         buildDeck();
         addClicker();
+        scoreBoard();
+    }
+
+    function scoreBoard(){
+        game.scoreBoard.textContent ='Dealer ${score[0]} vs Player ${score[1]}';
     }
 
     function buildDeck() {
@@ -53,14 +56,128 @@ const app = function () {
 
         game.playerCards.innerHTML = "";
         game.dealerCards.textContent = "";
+        takeCard(game.dealerHand,game.dealerCards,true);
         takeCard(game.dealerHand,game.dealerCards,false);
+        takeCard(game.playerHand,game.dealerCards,false);
+        takeCard(game.playerHand,game.dealerCards,false);
+        updateCount();
+    }
 
+    function playerStand() {
+        DealerPlay();
+        turnOff(game.btnHit);
+        turnOff(game.btnStand);
+    }
+
+    function nextCard() {
+        takeCard(game.playerHand, game.playerCards, false);
+        updateCount();
+    }
+
+    function findWinner() {
+        let player = scorer(game.playerHand);
+        let dealer = scorer(game.dealerHand);
+        console.log(player,dealer);
+        if(player > 21){
+            game.status.textContent = "Busted! with: "+ player;
+        }
+        else if(dealer > 21){
+            game.status.textContent = "Dealer Busted with! "+ dealer;
+        }
+
+        if(player == dealer){
+            game.status.textContent = "Draw no Winer";
+        } else if((player<22 && player>dealer) || dealer>21){
+            game.status.textContent = "Player Wins with: "+ player;
+            score[1]++;
+        } else {
+            game.status.textContent = "Dealer Wins with: "+ dealer;
+            score[0]++;
+        }
+        scoreBoard();
+        turnOn(game.btnDeal);
+        
+    }
+
+    function DealerPlay(){
+        let dealer = scorer(game.dealerHand);
+        game.cardBack.style.display = "none";
+        console.log(dealer);
+        game.status.textContent = "Dealer score" +dealer+" ";
+        if (dealer >= 17){
+            game.dealerScore.textContent = dealer;
+        } else {
+            takeCard(game.dealerHand, game.dealerCards,false);
+            game.dealerScore.textContent = dealer;
+            DealerPlay();
+        }
+    }
+
+    function updateCount(){
+        let player = scorer (game.playerHand);
+        let dealer = scorer(game.dealerHand);
+        console.log(player,dealer);
+        game.playerScore.textContent = player;
+        if(player < 21){
+            turnOn(game.btnHit);
+            turnOn(game.btnStand);
+            game.status.textContent = "Stand or take another card";
+        }
+        else if(player > 21){
+            findWinner();
+        }
+        else{
+            game.status.textContent = "Dealer in Play to minimum 17";
+            DealerPlay(dealer)
+        }
+    }
+
+    function scoreAce(val,aces){
+        if(val<21){
+            return val;
+        } 
+        else if(aces > 0){
+            aces--;
+            val = val -10;
+            return scoreAce(val,aces);
+        }
+        else{
+            return val;
+        }
+    }
+
+    function scorer(hand){
+        let total = 0;
+        let ace = 0;
+        hand.forEach(function(card){
+            console.log(card);
+            if(card.rank == "A"){
+                ace++;
+            }
+            total += Number(card.value);
+        });
+        if(ace > 0 && total > 21){
+            total = scoreAce(total,ace)
+        }
+
+
+        console.log(hand);
+        return Number(total);
     }
 
     function takeCard(hand,ele,h){
+        if(game.deck.length == 0){
+            buildDeck();
+        }
         let temp = game.deck.shift();
         console.log(temp);
         hand.push(temp);
+        showCard(temp, ele)
+        if (h) {
+            game.cardBack = document.createElement("div");
+            game.cardBack.classList.add("cardB")
+            ele.append(game.cardBack);
+        }
     }
 
     function showCard(card, ele){
@@ -76,14 +193,26 @@ const app = function () {
             span1.innerHTML = card.rank + "&" + card.suit + ";";
             span1.classList.add("tiny");
             div.appendChild(span1);
+
+            let span2 = document.createElement("div");
+            span2.innerHTML = card.rank;
+            span2.classList.add("big");
+            div.appendChild(span2);
+
+            let span3 = document.createElement("div");
+            span3.innerHTML = "&" + card.suit + ";";
+            span3.classList.add("big");
+            div.appendChild(span3);
+
+            ele.appendChild(div);
         }
     }
 
-    function turnOff(){
+    function turnOff(btn){
         btn.disabled = true;
         btn.style.backgroundColor = "#ddd";
     }
-    function turnOn(){
+    function turnOn(btn){
         btn.disabled = false;
         btn.style.backgroundColor = "#000";
     }

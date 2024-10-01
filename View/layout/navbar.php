@@ -11,6 +11,13 @@
     
     
 <div id="mySidenav" class="sidenav">
+
+  <div class="profile p-3 text-center">
+    <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Profile Picture">
+    <h4 id="username">Felhasználónév</h4>
+    <p id="wallet">Egyenleg: $1000</p>
+  </div>
+
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="/Pixel-Casino/Blackjack.php">BlackJack</a>
   <a href="#">Services</a>
@@ -30,6 +37,12 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
+
+const username = "Játékos01"; 
+const walletAmount = 1200;
+
+document.getElementById("username").textContent = username;
+document.getElementById("wallet").textContent = `Egyenleg: $${walletAmount}`;
 </script>
 </body>
 </html>
