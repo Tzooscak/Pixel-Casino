@@ -13,7 +13,7 @@ const app = function () {
     }
 
     function scoreBoard(){
-        game.scoreBoard.textContent ='Dealer ${score[0]} vs Player ${score[1]}';
+        game.scoreboard.textContent = `Dealer ${score[0]} vs Player ${score[1]}`;
     }
 
     function buildDeck() {
@@ -114,7 +114,7 @@ const app = function () {
     }
 
     function updateCount(){
-        let player = scorer (game.playerHand);
+        let player = scorer(game.playerHand);
         let dealer = scorer(game.dealerHand);
         console.log(player,dealer);
         game.playerScore.textContent = player;
@@ -221,7 +221,7 @@ const app = function () {
         game.main = document.querySelector('#game');
         console.log(game);
         game.scoreboard = document.createElement('div');
-        game.scoreboard.textContent = "Dealer 0 vs Player 0";
+        //game.scoreboard.textContent = "Dealer 0 vs Player 0";
         game.scoreboard.style.fontSize = "2em";
         game.main.append(game.scoreboard);
     

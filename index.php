@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     spl_autoload_register(function ($className) {
         require_once 'Controller/' . $className . '.php';
     });
@@ -16,9 +18,13 @@
             $controller->index();
             break;
         case '/Pixel-Casino/Blackjack.php':
-           $controller = new BlackJackController();
-           $controller->index();
+            $controller = new BlackJackController();
+            $controller->index();
            break;
+        case '/Pixel-Casino/AuthLogin.php':
+            $controller = new AuthController();
+            $controller->registration();
+            break;
         default:
             echo "A keresett oldal nem található!";
     }
