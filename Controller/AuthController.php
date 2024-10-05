@@ -10,6 +10,15 @@ class AuthController
     require_once 'View/Auth/registration.php';
   }
 
+  public function login()
+  {
+
+    require_once 'View/layout/navbar.php';
+    require_once 'View/Auth/login.php';
+
+
+  }
+
 }
 
 class UserRegister
@@ -35,7 +44,7 @@ class UserRegister
 
       // check if required fields are empty
       if (empty($username) || empty($email) || empty($password)) {
-        header('Location: /benjamin/register');
+        header('location: Pixel-Casino/index.php');
         return;
       }
 
@@ -54,13 +63,13 @@ class UserRegister
       // register the user
       $result = $this->user->register($username, $password, $email);
       if ($result === true) {
-        header('Location: /benjamin/index.php');
+        header('location: /Pixel-Casino/index.php');
       } else {
         $_SESSION['message'] = $result;
-        header('Location: /benjamin/register');
+        header('Location: /Pixel-Casino/register');
       }
     } else {
-      header('Location: /benjamin/register');
+      header('Location: /Pixel-Casino/register');
     }
   }
 
@@ -80,22 +89,23 @@ class UserLogin
   function login()
   {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $email = $_POST["email"];
+      $name = $_POST["name"];
       $password = $_POST["password"];
 
       // check if required fields are empty
-      if (empty($email) || empty($password)) {
-        header('Location: /benjamin/login');
+      if (empty($name) || empty($password)) {
+        header('Location: /Pixel-Casino/index.php');
         return;
       }
 
       // sanitize the inputs
-      $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+      $name = filter_var($name, FILTER_SANITIZE_EMAIL);
 
       // login the user
-      $result = $this->user->login($email, $password);
+      $result = $this->user->Login($name, $password);
+      echo $result;
       if ($result === true) {
-        header('Location: /benjamin/index.php');
+        header('Location: /Pixel-Casino/index.php');
       } else {
         $_SESSION['message'] = $result;
         header('Location: /benjamin/login');

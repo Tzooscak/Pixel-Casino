@@ -14,8 +14,8 @@
 
   <div class="profile p-3 text-center">
       <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Profile Picture">
-      <h4 id="username"><?php echo $_SESSION['nev'] ?></h4>
-      <p id="wallet"><?php echo 0 ?></p>
+      <h4 id="username"><?php echo $_SESSION['name'] ?></h4>
+      <p id="wallet"><?php echo $_SESSION['wallet'] ?></p>
       <form action="logout.php" method="POST"> 
           <button type="submit">Logout</button> 
       </form> 
@@ -23,9 +23,10 @@
 
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="/Pixel-Casino/Blackjack.php">BlackJack</a>
-  <a href="/Pixel-Casino/AuthLogin.php">Services</a>
-  <a href="#">Clients</a>
-  <a href="#">Contact</a>
+  <a href="/Pixel-Casino/AuthRegister.php">Register</a>
+  <a href="/Pixel-Casino/AuthLogin.php">Login</a>
+  <a href="/Pixel-Casino/Roulette.php">Roulette</a>
+  <a href="/Pixel-Casino/Jackpot.php">Jackpot</a>
 </div>
 
 <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>

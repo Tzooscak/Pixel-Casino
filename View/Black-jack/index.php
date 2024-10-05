@@ -20,12 +20,13 @@
             <div class="betarea">
                 <h4>Bet Area</h4>
                 <p>Place your bets here.</p>
+                <div id="bet"></div>
             </div>
             <!-- Játékterület -->
             <div class="playarea">
                 <h4>Play Area</h4>
-                <div id="game"></div>
                 <p>Cards will appear here.</p>
+                <div id="game"></div>
             </div>
         </div>
 

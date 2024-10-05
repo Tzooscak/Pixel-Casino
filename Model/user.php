@@ -11,7 +11,7 @@ class User
         $this->db = new DataBase();
     }
 
-    public function checkLogin($username, $password)
+    public function Login($username, $password)
     {
         $sql = 'SELECT * FROM users WHERE username ="' . $username . '"';
         //Check if we have this user
@@ -19,9 +19,10 @@ class User
             if ($row = $result->fetch_assoc()) {
                 //The password is good?
                 if ($row['password'] == md5($password)) {
-                    $_SESSION["nev"] = $row["username"];
-                    $_SESSION["id"] = $row["user_id"];
+                    $_SESSION["name"] = $row["username"];
+                    $_SESSION["id"] = $row["id"];
                     $_SESSION["email"] = $row["email"];
+                    $_SESSION["wallet"] = $row["wallet"];
                     //$_SESSION["Jog"] = $row["privilege"];
                     return true;
                 } else {
@@ -48,7 +49,7 @@ class User
         } */
 
         // Check if user already exists
-       $check = $this->db->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        $check = $this->db->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
         if (!$check) {
             return "Error: " . $this->db->error;
         }
@@ -60,16 +61,17 @@ class User
         }
 
         // Prepare the query
-        $stmt = $this->db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO users (username, email, password, wallet) VALUES (?, ?, ?, ?)");
         // Check if the prepare statement failed
         if (!$stmt) {
             return "Error: " . $this->db->error;
         }
         //need a hashed password because he wil cry  for it later
         $hashed_password = md5($password);
+        $walett_default = 100;
 
         // Bind the parameters
-        $stmt->bind_param("sss", $username, $email, $hashed_password);
+        $stmt->bind_param("sssi", $username, $email, $hashed_password, $walett_default);
 
         // Execute the query
         if ($stmt->execute()) {

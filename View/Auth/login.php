@@ -25,7 +25,7 @@
 <body>
 
 <div class="register-container">
-    <h2 class="mb-4">Login</h2>
+    <h2 class="mb-4" method="post">Login</h2>
     <form id="registrationForm" method = "post">
         <div class="mb-3">
             <label for="username" class="form-label">Felhasználónév</label>
@@ -43,8 +43,7 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $loginster = new UserLogin();
         $loginster->login();
-    }
-    echo $_SESSION["nev"];
+    };
 ?>
 
 </body>

@@ -21,9 +21,13 @@
             $controller = new BlackJackController();
             $controller->index();
            break;
-        case '/Pixel-Casino/AuthLogin.php':
+        case '/Pixel-Casino/AuthRegister.php':
             $controller = new AuthController();
             $controller->registration();
+            break;
+        case '/Pixel-Casino/AuthLogin.php':
+            $controller = new AuthController();
+            $controller->login();
             break;
         default:
             echo "A keresett oldal nem található!";

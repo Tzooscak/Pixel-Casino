@@ -1,4 +1,5 @@
 const app = function () {
+    var wallet = sessionStorage.getItem('wallet');
     const game = {};
     const suits = ["spades", "hearts", "clubs", "diams"];
     const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
@@ -43,6 +44,7 @@ const app = function () {
     }
 
     function addClicker(){
+        game.btnBet.addEventListener("click",bet);
         game.btnDeal.addEventListener("click",deal);
         game.btnStand.addEventListener("click",playerStand);
         game.btnHit.addEventListener("click",nextCard);
@@ -165,6 +167,11 @@ const app = function () {
         return Number(total);
     }
 
+    function bet() {
+        let betValue = game.inputBet.value;
+        console.log(betValue);
+    }
+
     function takeCard(hand,ele,h){
         if(game.deck.length == 0){
             buildDeck();
@@ -266,28 +273,41 @@ const app = function () {
         game.btnStand.classList.add('btn');
         game.dashboard.append(game.btnStand);
 
-        game.playerCash = document.createElement('div');
-        game.playerCash.classList.add('message');
-        game.playerCash.textContent = "Player Cash: $1000";
-        game.dashboard.append(game.playerCash);
+        const betArea = document.querySelector('#bet');
+
+        game.inputLabel = document.createElement('label');
+        game.inputLabel.textContent = "Bet: " + game.inputBet?.value || 0;
+        betArea.append(game.inputLabel);
+        betArea.append(document.createElement('br'));
 
         game.inputBet = document.createElement('input');
-        game.inputBet.type = "number";
-        game.inputBet.style.width = "4em";
+        game.inputBet.type = "range";
+        game.inputBet.min = 0;
+        game.inputBet.max = wallet;
+        game.inputBet.style.width = "100%";
         game.inputBet.style.marginTop = "1em";
         game.inputBet.value = 0;
-        game.dashboard.append(game.inputBet);
+        betArea.append(game.inputBet);
 
-        game.betButton = document.createElement('button');
-        game.betButton.textContent = "BET";
-        game.betButton.classList.add('btn');
-        game.dashboard.append(game.betButton);
+        game.inputBet.addEventListener('input', function() {
+            game.inputLabel.textContent = "Bet: " + game.inputBet.value;
+        });
+
+        game.btnBet = document.createElement('button');
+        game.btnBet.textContent = "BET";
+        game.btnBet.classList.add('btn');
+        betArea.append(game.btnBet);
+
 
         game.dashboard.append(game.status);
 
         game.table.append(game.dashboard);
         game.main.append(game.table);
+
+        console.log(wallet);
     }
+
+    
 
     return {
         init : init

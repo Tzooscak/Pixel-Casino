@@ -52,7 +52,6 @@
         $register = new UserRegister();
         $register->register();
     }
-    echo $_SESSION["nev"];
 ?>
 
 </body>
