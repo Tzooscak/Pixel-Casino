@@ -108,10 +108,10 @@ class UserLogin
         header('Location: /Pixel-Casino/index.php');
       } else {
         $_SESSION['message'] = $result;
-        header('Location: /benjamin/login');
+        header('Location: /Pixel-Casino/AuthLogin.php');
       }
     } else {
-      header('Location: /benjamin/login');
+      header('Location: /Pixel-Casino/AuthLogin.php');
     }
 
   }

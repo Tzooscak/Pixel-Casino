@@ -15,8 +15,8 @@
   <div class="profile p-3 text-center">
       <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Profile Picture">
       <h4 id="username"><?php echo $_SESSION['name'] ?></h4>
-      <p id="wallet"><?php echo $_SESSION['wallet'] ?></p>
-      <form action="logout.php" method="POST"> 
+      <p id="wallet"></p>
+      <form action="index.php" method="POST"> 
           <button type="submit">Logout</button> 
       </form> 
   </div>

@@ -1,5 +1,5 @@
 const app = function () {
-    var wallet = sessionStorage.getItem('wallet');
+    var wallet = sessionStorage.getItem('wallet') || 1000; // 1000, ha nincs megadva a wallet
     const game = {};
     const suits = ["spades", "hearts", "clubs", "diams"];
     const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
@@ -8,6 +8,7 @@ const app = function () {
         buildGameBoard();
         turnOff(game.btnHit);
         turnOff(game.btnStand);
+        turnOff(game.btnDeal);
         buildDeck();
         addClicker();
         scoreBoard();
@@ -24,7 +25,7 @@ const app = function () {
                 console.log(suits[i], ranks[j]);
                 let card = {};
                 let tempValue = isNaN(ranks[j]) ? 10 : ranks[j];
-                tempValue = (ranks[j] == "ace") ? 11 : tempValue;
+                tempValue = (ranks[j] == "A") ? 11 : tempValue;
 
 
                 card.suit = suits[i];
@@ -33,6 +34,7 @@ const app = function () {
                 game.deck.push(card);
            }
         }
+        Shuffle(game.deck);
         console.log(game.deck);
     }
 
@@ -56,16 +58,19 @@ const app = function () {
         game.dealerHand = [];
         game.start = true;
 
-        game.playerCards.innerHTML = "";
-        game.dealerCards.textContent = "";
+        game.playerCards.innerHTML = "DEAL";
+        game.dealerCards.textContent = "DEAL";
         takeCard(game.dealerHand,game.dealerCards,true);
         takeCard(game.dealerHand,game.dealerCards,false);
-        takeCard(game.playerHand,game.dealerCards,false);
-        takeCard(game.playerHand,game.dealerCards,false);
+        takeCard(game.playerHand,game.playerCards,false);
+        takeCard(game.playerHand,game.playerCards,false);
         updateCount();
     }
 
     function playerStand() {
+        showModalMessage("Dealer Turn", 1500);
+        game.playerCards.innerHTML = "STAND";
+        game.dealerCards.textContent = "STAND";
         DealerPlay();
         turnOff(game.btnHit);
         turnOff(game.btnStand);
@@ -98,13 +103,14 @@ const app = function () {
         }
         scoreBoard();
         turnOn(game.btnDeal);
+        turnOff(game.btnBet);
+        turnOff(game.btnStand);
         
     }
 
     function DealerPlay(){
         let dealer = scorer(game.dealerHand);
         game.cardBack.style.display = "none";
-        console.log(dealer);
         game.status.textContent = "Dealer score" +dealer+" ";
         if (dealer >= 17){
             game.dealerScore.textContent = dealer;
@@ -113,6 +119,8 @@ const app = function () {
             game.dealerScore.textContent = dealer;
             DealerPlay();
         }
+
+        findWinner();
     }
 
     function updateCount(){
@@ -120,12 +128,15 @@ const app = function () {
         let dealer = scorer(game.dealerHand);
         console.log(player,dealer);
         game.playerScore.textContent = player;
+        game.dealerScore.textContent = dealer;
         if(player < 21){
             turnOn(game.btnHit);
             turnOn(game.btnStand);
             game.status.textContent = "Stand or take another card";
         }
         else if(player > 21){
+            game.status.textContent = "Busted! with: "+ player;
+            showModalMessage("Calculating winner...", 1500);
             findWinner();
         }
         else{
@@ -152,7 +163,6 @@ const app = function () {
         let total = 0;
         let ace = 0;
         hand.forEach(function(card){
-            console.log(card);
             if(card.rank == "A"){
                 ace++;
             }
@@ -162,22 +172,59 @@ const app = function () {
             total = scoreAce(total,ace)
         }
 
-
-        console.log(hand);
         return Number(total);
     }
 
     function bet() {
-        let betValue = game.inputBet.value;
-        console.log(betValue);
+        let betValue = parseInt(game.inputBet.value);
+        if (betValue > wallet) {
+            game.status.textContent = "Insufficient funds!";
+            return;
+        }
+    
+        turnOn(game.btnDeal);
+
+        wallet -= betValue;
+        sessionStorage.setItem('wallet', wallet);
+        game.status.textContent = "Bet placed: " + betValue;
+    }
+    
+
+    function probality(n){
+        return !!n && Math.random() <= n; // 1 is 100% and the double !! is just conversion 
     }
 
     function takeCard(hand,ele,h){
+
         if(game.deck.length == 0){
             buildDeck();
         }
-        let temp = game.deck.shift();
-        console.log(temp);
+
+        let customCard;
+        if (probality(0.01) && hand.length > 2){
+            if (probality(0.5)) {
+                customCard = {
+                    suit: "special",
+                    rank: "Devil",
+                    value: "-666"
+                }
+            } else {
+                customCard = {
+                    suit: "special",
+                    rank: "Angel",
+                    value: "+777"
+                }
+            }
+        }
+
+        let temp; 
+
+        if (customCard) {
+            temp = customCard
+        } else {
+            temp = game.deck.shift();
+        }
+
         hand.push(temp);
         showCard(temp, ele)
         if (h) {
@@ -185,16 +232,17 @@ const app = function () {
             game.cardBack.classList.add("cardB")
             ele.append(game.cardBack);
         }
+
     }
 
     function showCard(card, ele){
         if (card != undefined) {
-            //ele.textContent = card.rank + "&" + card.suit + ";";
-            ele.style.backgroundColor = "white";
             let div = document.createElement("div");
             div.classList.add("card");
             if (card.suit == "hearts" || card.suit == "diams") {
                 div.classList.add("red");
+            } else if(card.suit ){
+
             }
             let span1 = document.createElement("div");
             span1.innerHTML = card.rank + "&" + card.suit + ";";
@@ -224,9 +272,19 @@ const app = function () {
         btn.style.backgroundColor = "#000";
     }
 
+    function showModalMessage(message, duration = 2000) {
+        game.modal.textContent = message;
+        game.modal.style.display = 'block';
+    
+        setTimeout(() => {
+            game.modal.style.display = 'none';
+        }, duration);
+    }
+    
+
     function buildGameBoard() {
         game.main = document.querySelector('#game');
-        console.log(game);
+
         game.scoreboard = document.createElement('div');
         //game.scoreboard.textContent = "Dealer 0 vs Player 0";
         game.scoreboard.style.fontSize = "2em";
@@ -239,6 +297,7 @@ const app = function () {
         game.dealerScore = document.createElement('div');
         game.dealerScore.textContent = "-";
         game.dealerScore.classList.add('score');
+        
         game.dealer.append(game.dealerScore);
         game.table.append(game.dealer);
         game.dealer.append(game.dealerCards);
@@ -249,6 +308,7 @@ const app = function () {
         game.playerScore = document.createElement('div');
         game.playerScore.textContent = "-";
         game.playerScore.classList.add('score');
+        
         game.player.append(game.playerScore);
         game.table.append(game.player);
         game.player.append(game.playerCards);
@@ -303,6 +363,12 @@ const app = function () {
 
         game.table.append(game.dashboard);
         game.main.append(game.table);
+
+        game.modal = document.createElement('div');
+        game.modal.classList.add('modal');
+        game.modal.style.display = 'none';
+        game.main.append(game.modal);
+
 
         console.log(wallet);
     }

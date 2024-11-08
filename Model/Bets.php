@@ -47,9 +47,9 @@ class Bets {
 
         $sql = 'SELECT `wallet` FROM users WHERE id ="' . $user_id . '"';
         
-        $sth = $dbh->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-        $sth->execute([':id' => $id]);
-        $users = $sth->fetchAll();
+        //$sth = $dbh->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        //$sth->execute([':id' => $id]);
+        //$users = $sth->fetchAll();
 
         
     }

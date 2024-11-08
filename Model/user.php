@@ -14,25 +14,24 @@ class User
     public function Login($username, $password)
     {
         $sql = 'SELECT * FROM users WHERE username ="' . $username . '"';
+        $result = $this->db->dbSelect($sql);
+
         //Check if we have this user
-        if ($result = $this->db->dbSelect($sql)) {
-            if ($row = $result->fetch_assoc()) {
-                //The password is good?
-                if ($row['password'] == md5($password)) {
-                    $_SESSION["name"] = $row["username"];
-                    $_SESSION["id"] = $row["id"];
-                    $_SESSION["email"] = $row["email"];
-                    $_SESSION["wallet"] = $row["wallet"];
-                    //$_SESSION["Jog"] = $row["privilege"];
-                    return true;
-                } else {
-                    return "The password is incorrect!";
-                }
+        if ($result && count($result) > 0) {
+            $row = $result[0];
+
+            //check password
+            if($row['password'] == md5($password)) 
+            {
+                $_SESSION["name"] = $row['username'];
+                $_SESSION["id"] = $row['id'];
+                $_SESSION["email"] = $row['email'];
+                return true;
             } else {
-                return "There was an error with the login.";
+                return "Password is Incorrect   ";
             }
         } else {
-            return "User not found.";
+            return "User is not Exists ";
         }
     }
 
@@ -78,7 +77,7 @@ class User
             $_SESSION["name"] = $username;
             $_SESSION["id"] = $stmt->insert_id;
             $_SESSION["email"] = $email;
-            $_SESSION["wallet"] = 100;
+            //$_SESSION["wallet"] = 100;
             //$_SESSION["Jog"] = "user";
             header('location: Pixel-Casino/index.php');
             exit();
