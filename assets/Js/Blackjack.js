@@ -58,19 +58,26 @@ const app = function () {
         game.dealerHand = [];
         game.start = true;
 
-        game.playerCards.innerHTML = "DEAL";
-        game.dealerCards.textContent = "DEAL";
+        game.playerCards.innerHTML = "";
+        game.dealerCards.textContent = "";
         takeCard(game.dealerHand,game.dealerCards,true);
         takeCard(game.dealerHand,game.dealerCards,false);
         takeCard(game.playerHand,game.playerCards,false);
         takeCard(game.playerHand,game.playerCards,false);
         updateCount();
+        turnOff(game.btnDeal);
     }
 
     function playerStand() {
         showModalMessage("Dealer Turn", 1500);
-        game.playerCards.innerHTML = "STAND";
-        game.dealerCards.textContent = "STAND";
+
+        if (game.cardBack) {
+            game.cardBack.remove();
+            let firstCard = game.deck.shift();
+            game.dealerHand.unshift(firstCard);
+            showCard(firstCard, game.dealerCards);
+        }
+
         DealerPlay();
         turnOff(game.btnHit);
         turnOff(game.btnStand);
@@ -194,14 +201,14 @@ const app = function () {
         return !!n && Math.random() <= n; // 1 is 100% and the double !! is just conversion 
     }
 
-    function takeCard(hand,ele,h){
-
-        if(game.deck.length == 0){
+    function takeCard(hand, ele, h) {
+        
+        if (game.deck.length == 0) {
             buildDeck();
         }
-
+    
         let customCard;
-        if (probality(0.01) && hand.length > 2){
+        if (probality(0.01) && hand.length > 2) {
             if (probality(0.5)) {
                 customCard = {
                     suit: "special",
@@ -211,29 +218,31 @@ const app = function () {
             } else {
                 customCard = {
                     suit: "special",
-                    rank: "Angel",
+                    rank: "TrollAngel",
                     value: "+777"
                 }
             }
         }
-
-        let temp; 
-
-        if (customCard) {
-            temp = customCard
-        } else {
-            temp = game.deck.shift();
-        }
-
-        hand.push(temp);
-        showCard(temp, ele)
+    
+        let temp;
+    
         if (h) {
             game.cardBack = document.createElement("div");
-            game.cardBack.classList.add("cardB")
+            game.cardBack.classList.add("cardB");
             ele.append(game.cardBack);
+        } 
+        if (customCard != null) {
+            temp = customCard;
+            hand.push(temp);
+            showCard(temp, ele);
+        } else {
+            temp = game.deck.shift();
+            hand.push(temp);
+            showCard(temp, ele);
+            console.log("Dealer második lap:", temp); 
         }
-
     }
+    
 
     function showCard(card, ele){
         if (card != undefined) {
@@ -241,8 +250,6 @@ const app = function () {
             div.classList.add("card");
             if (card.suit == "hearts" || card.suit == "diams") {
                 div.classList.add("red");
-            } else if(card.suit ){
-
             }
             let span1 = document.createElement("div");
             span1.innerHTML = card.rank + "&" + card.suit + ";";
@@ -336,7 +343,7 @@ const app = function () {
         const betArea = document.querySelector('#bet');
 
         game.inputLabel = document.createElement('label');
-        game.inputLabel.textContent = "Bet: " + game.inputBet?.value || 0;
+        game.inputLabel.textContent = "Bet: " + game.inputBet?.value || 10000;
         betArea.append(game.inputLabel);
         betArea.append(document.createElement('br'));
 

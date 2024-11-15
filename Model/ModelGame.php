@@ -2,13 +2,16 @@
 
 class Game {
 
-    private $id {get;}
-    private $name {get;}
-    private $description {get;}
-    private $createdAt {get;}
+    protected $id;
+    protected $name;
+    protected $description;
+    protected $createdAt;
 
     public function __construct($id, $name, $description, $createdAt) {
-
+        $this->id = $id;
+        $this->name = $name;
+        $this->description = $description;
+        $this->createdAt = $createdAt;
     }
 
 }

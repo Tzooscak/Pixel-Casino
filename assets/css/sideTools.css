@@ -1,0 +1,121 @@
+.tools{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.color {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--set-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.color:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tools-toggle {
+    position: fixed;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+
+.tools-toggle span {
+    font-size: 40px;
+    color: #333;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.tools-toggle span:hover {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+  
+.tools {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+  
+.tools a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+  
+.tools a:hover {
+    color: #f1f1f1;
+}
+  
+.tools .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.tools button {
+    width: auto;
+    height: auto;
+    margin: 10px;
+    background-color: #444;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tools button:hover {
+    background-color: #555;
+}
+
+  
+@media screen and (max-width: 768px) {
+    .tools {
+        width: 100%;
+    }
+
+    .color {
+        width: 25px;
+        height: 25px;
+    }
+}

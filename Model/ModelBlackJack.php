@@ -1,9 +1,10 @@
 <?php
 
-class BlackJack {
+class BlackJack extends Game{
 
-    //private 
-
+    public function play($betAmount) {
+        // Blackjack játék logika
+    }
 
 }
 

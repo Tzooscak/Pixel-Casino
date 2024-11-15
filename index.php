@@ -29,6 +29,10 @@
             $controller = new AuthController();
             $controller->login();
             break;
+        case '/Pixel-Casino/Canvas.php':
+            $controller = new CanvasController();
+            $controller->index();
+            break;
         default:
             echo "A keresett oldal nem található!";
     }
