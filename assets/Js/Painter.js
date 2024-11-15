@@ -32,6 +32,15 @@ const app = function () {
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         });
+
+        //save the drawing as a PNG file
+        document.getElementById('saveProfile').addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'profile_drawing.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+        
     }
 
     function startDrawing(e) {

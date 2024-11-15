@@ -29,6 +29,10 @@
             $controller = new AuthController();
             $controller->login();
             break;
+        case '/Pixel-Casino/AuthLogout.php':
+            $controller = new AuthController();
+            $controller->logout();
+            break;
         case '/Pixel-Casino/Canvas.php':
             $controller = new CanvasController();
             $controller->index();

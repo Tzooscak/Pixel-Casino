@@ -36,13 +36,29 @@ class Bets {
     }
     
     public function createBet($user_id, $game_id, $bet_amount) {
+        if (!$this->checkBet($user_id, $bet_amount)) {
+            return ['success' => false, 'message' => 'Insufficient funds'];
+        }
+    
         $query = "INSERT INTO bets (user_id, game_id, bet_amount, created_at) VALUES (:user_id, :game_id, :bet_amount, NOW())";
-        $params = array(
+        $params = [
             ':user_id' => $user_id,
             ':game_id' => $game_id,
             ':bet_amount' => $bet_amount
-        );
+        ];
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($params);
+    
+            // Pénztárca frissítése
+            $this->updateWallet($user_id, -$bet_amount, 'bet');
+    
+            return ['success' => true, 'message' => 'Bet placed successfully'];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
+    
 
     public function updateResult($result) {
         $this->result = $result;
@@ -73,7 +89,7 @@ class Bets {
     public function processResult($bet_id, $user_id, $result, $bet_amount) {
         $amount = 0;
         $type = 'lose';
-    
+
         if ($result === 'win') {
             $amount = $bet_amount * 2;
             $type = 'win';
@@ -82,12 +98,24 @@ class Bets {
             $type = 'draw';
         }
     
-        $this->updateWallet($user_id, $amount, $type);
+        try {
+            $this->updateWallet($user_id, $amount, $type);
     
-        // Frissítsd az eredményt a bets táblában is.
-        $query = "UPDATE bets SET result = :result WHERE id = :bet_id";
-        $this->db->query($query, [':result' => $result, ':bet_id' => $bet_id]);
+            $query = "UPDATE bets SET result = :result WHERE id = :bet_id";
+            $params = [
+                ':result' => $result,
+                ':bet_id' => $bet_id
+            ];
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($params);
+    
+            return ['success' => true, 'message' => 'Result processed successfully'];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
+    
+    
     
     
 }

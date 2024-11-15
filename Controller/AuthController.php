@@ -6,17 +6,30 @@ class AuthController
   public function registration()
   {
 
-    require_once 'View/layout/navbar.php';
     require_once 'View/Auth/registration.php';
   }
 
   public function login()
   {
 
-    require_once 'View/layout/navbar.php';
     require_once 'View/Auth/login.php';
 
 
+  }
+
+  public function logout(){
+
+    session_start();
+    
+    
+    session_unset();
+    session_destroy();
+    
+    
+    header('Location: /Pixel-Casino/');
+    exit();
+
+    
   }
 
 }

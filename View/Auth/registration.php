@@ -25,26 +25,27 @@
 <body>
 
 <div class="register-container">
-    <h2 class="mb-4">Regisztráció</h2>
+    <h2 class="mb-4">Registration</h2>
     <form id="registrationForm" method = "post">
         <div class="mb-3">
-            <label for="username" class="form-label">Felhasználónév</label>
+            <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name = "name" placeholder="Add meg a felhasználóneved" required>
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label">Email cím</label>
+            <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name = "email" placeholder="Add meg az email címed" required>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Jelszó</label>
+            <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Add meg a jelszavad" required>
         </div>
         <div class="mb-3">
-            <label for="confirmPassword" class="form-label">Jelszó megerősítése</label>
+            <label for="confirmPassword" class="form-label">Password again</label>
             <input type="password" class="form-control" id="confirmPassword" placeholder="Erősítsd meg a jelszavad" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Regisztráció</button>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
     </form>
+    <p class="mt-3">Already have an account? <a href="/Pixel-Casino/AuthLogin.php">Login</a></p>
 </div>
 
 <?php

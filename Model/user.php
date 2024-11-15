@@ -38,52 +38,43 @@ class User
 
     public function register($username, $password, $email)
     {
-        /* // Check password complexity
-        if (strlen($password) < 8 ||
-            !preg_match('/[A-Z]/', $password) ||
-            !preg_match('/[0-9]/', $password) ||
-            !preg_match('/[^a-zA-Z0-9]/', $password)) {
-            // Password doesn't meet complexity requirements
-            return "Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.";
-        } */
-
-        // Check if user already exists
-        $check = $this->db->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        $check = $this->db->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
         if (!$check) {
-            return "Error: " . $this->db->error;
+            return "Error: Hiba történt az előkészítés során.";
         }
-        $check->bind_param("ss", $username, $email);
+        $check->bindValue(":username", $username);
+        $check->bindValue(":email", $email);
         $check->execute();
-        $result = $check->get_result();
-        if ($result->num_rows > 0) {
-            return "Username or email already taken!";
+
+        $result = $check->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return "Felhasználónév vagy email már használatban van!";
         }
 
-        // Prepare the query
-        $stmt = $this->db->prepare("INSERT INTO users (username, email, password, wallet) VALUES (?, ?, ?, ?)");
-        // Check if the prepare statement failed
-        if (!$stmt) {
-            return "Error: " . $this->db->error;
-        }
-        //need a hashed password because he wil cry  for it later
         $hashed_password = md5($password);
-        $walett_default = 100;
+        $wallet_default = 100;
 
-        // Bind the parameters
-        $stmt->bind_param("sssi", $username, $email, $hashed_password, $walett_default);
+        $stmt = $this->db->prepare("INSERT INTO users (username, email, password, wallet) VALUES (:username, :email, :password, :wallet)");
+        if (!$stmt) {
+            return "Error: Hiba történt az előkészítés során.";
+        }
 
-        // Execute the query
+        $stmt->bindValue(":username", $username);
+        $stmt->bindValue(":email", $email);
+        $stmt->bindValue(":password", $hashed_password);
+        $stmt->bindValue(":wallet", $wallet_default, PDO::PARAM_INT);
+
         if ($stmt->execute()) {
+        
             $_SESSION["name"] = $username;
-            $_SESSION["id"] = $stmt->insert_id;
+            $_SESSION["id"] = $this->db->conn->lastInsertId();
             $_SESSION["email"] = $email;
-            //$_SESSION["wallet"] = 100;
-            //$_SESSION["Jog"] = "user";
-            header('location: Pixel-Casino/index.php');
+            header('Location: Pixel-Casino/index.php');
             exit();
         } else {
-            return "Error: " . $stmt->error;
+            return "Error: Hiba történt a regisztráció során: " . $stmt->errorInfo()[2];
         }
     }
+
 }
 ?>

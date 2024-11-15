@@ -1,5 +1,5 @@
 const app = function () {
-    var wallet = sessionStorage.getItem('wallet') || 1000; // 1000, ha nincs megadva a wallet
+    var wallet = 1000;
     const game = {};
     const suits = ["spades", "hearts", "clubs", "diams"];
     const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
@@ -19,24 +19,22 @@ const app = function () {
     }
 
     function buildDeck() {
-        game.deck = [];
-        for (let i = 0; i < suits.length; i++) {
-           for (let j = 0; j < ranks.length; j++) {
-                console.log(suits[i], ranks[j]);
-                let card = {};
-                let tempValue = isNaN(ranks[j]) ? 10 : ranks[j];
-                tempValue = (ranks[j] == "A") ? 11 : tempValue;
-
-
-                card.suit = suits[i];
-                card.rank = ranks[j];
-                card.value = tempValue;
-                game.deck.push(card);
-           }
-        }
+        game.deck = suits.flatMap(suit => 
+            ranks.map(rank => {
+                let value = isNaN(rank) ? 10 : rank;
+                value = (rank === "A") ? 11 : value;
+    
+                return {
+                    suit: suit,
+                    rank: rank,
+                    value: value
+                };
+            })
+        );
         Shuffle(game.deck);
         console.log(game.deck);
     }
+    
 
     function Shuffle(cards){
         cards.sort(function(){

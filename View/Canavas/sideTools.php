@@ -41,7 +41,7 @@
     </div>
 
     <div class="tools-toggle">
-      <span class="material-symbols-outlined" onclick="openTools()">bookmark</span>
+      <span class="material-symbols-outlined" onclick="openTools()">brush</span>
     </div>
 
     <script>

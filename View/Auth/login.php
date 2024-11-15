@@ -28,15 +28,16 @@
     <h2 class="mb-4" method="post">Login</h2>
     <form id="registrationForm" method = "post">
         <div class="mb-3">
-            <label for="username" class="form-label">Felhasználónév</label>
+            <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name = "name" placeholder="Add meg a felhasználóneved" required>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Jelszó</label>
+            <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Add meg a jelszavad" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">Login</button>
     </form>
+    <p class="mt-3">Registered? <a href="/Pixel-Casino/AuthRegister.php">Regisztrálj!</a></p>
 </div>
 
 <?php
