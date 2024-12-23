@@ -37,6 +37,10 @@
             $controller = new CanvasController();
             $controller->index();
             break;
+        case '/Pixel-Casino/Roulette.php':
+            $controller = new RouletteController();
+            $controller->index();
+            break;
         default:
             echo "A keresett oldal nem található!";
     }

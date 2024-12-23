@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #001f3f; /* Sötétkék */
+    color: white;
+    text-align: center;
+}
+
+.roulette-container {
+    margin: 50px auto;
+    overflow: hidden;
+    width: 300px;
+    border: 4px solid #0a0;
+    border-radius: 15px;
+    background-color: #222;
+    position: relative;
+}
+
+.roulette-strip {
+    display: flex;
+    transition: transform 2s ease-out;
+    position: relative;
+}
+
+.roulette-slot {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    margin: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 50%;
+}
+
+.roulette-slot.green {
+    background-color: green;
+}
+
+.roulette-slot.red {
+    background-color: red;
+}
+
+.roulette-slot.black {
+    background-color: black;
+}
+
+.spin-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    background-color: #0074d9;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.spin-btn:hover {
+    background-color: #005bb5;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: yellow;
+}
+
+.bet-area {
+    margin: 30px auto;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+}
+
+.bet-area h2 {
+    margin-bottom: 15px;
+}
+
+.bet-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.bet-options button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #0074d9;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bet-options button:hover {
+    background-color: #005bb5;
+}
+
+.selected {
+    background-color: #ff4136 !important; /* Kiválasztott gomb */
+}
