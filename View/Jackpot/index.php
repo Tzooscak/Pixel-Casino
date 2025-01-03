@@ -26,15 +26,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['spin'])) {
         // Check for wins
         if ($result[0] === $result[1] && $result[1] === $result[2]) {
             // All symbols match
-            $multiplier = match($result[0]) {
-                '💎' => 50,
-                '7️⃣' => 25,
-                '🎰' => 15,
-                '🍊' => 10,
-                '🍋' => 8,
-                '🍒' => 5,
-                default => 0
-            };
+            $multiplier = 0;
+            switch ($result[0]) {
+                case '💎':
+                    $multiplier = 50;
+                    break;
+                case '7️⃣':
+                    $multiplier = 25;
+                    break;
+                case '🎰':
+                    $multiplier = 15;
+                    break;
+                case '🍊':
+                    $multiplier = 10;
+                    break;
+                case '🍋':
+                    $multiplier = 8;
+                    break;
+                case '🍒':
+                    $multiplier = 5;
+                    break;
+                default:
+                    $multiplier = 0;
+            }
+
             $winAmount = $bet * $multiplier;
             $_SESSION['balance'] += $winAmount;
             $isWin = true;
