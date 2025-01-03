@@ -41,6 +41,10 @@
             $controller = new RouletteController();
             $controller->index();
             break;
+        case '/Pixel-Casino/Jackpot.php':
+            $controller = new JackpotController();
+            $controller->index();
+            break;
         default:
             echo "A keresett oldal nem található!";
     }

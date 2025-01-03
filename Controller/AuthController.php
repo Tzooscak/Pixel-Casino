@@ -76,7 +76,7 @@ class UserRegister
       // register the user
       $result = $this->user->register($username, $password, $email);
       if ($result === true) {
-        header('location: /Pixel-Casino/index.php');
+        header('location: /Pixel-Casino/');
       } else {
         $_SESSION['message'] = $result;
         header('Location: /Pixel-Casino/register');
@@ -118,7 +118,7 @@ class UserLogin
       $result = $this->user->Login($name, $password);
       echo $result;
       if ($result === true) {
-        header('Location: /Pixel-Casino/index.php');
+        header('Location: /Pixel-Casino/');
       } else {
         $_SESSION['message'] = $result;
         header('Location: /Pixel-Casino/AuthLogin.php');
